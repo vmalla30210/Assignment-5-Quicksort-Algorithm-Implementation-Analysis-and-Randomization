@@ -1,0 +1,54 @@
+# deterministic_quicksort.py
+
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]  # Choose the middle element as the pivot
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quicksort(left) + middle + quicksort(right)
+
+# randomized_quicksort.py
+import random
+
+def randomized_quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[random.randint(0, len(arr) - 1)]  # Randomly choose a pivot
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return randomized_quicksort(left) + middle + randomized_quicksort(right)
+
+# empirical_analysis.py
+import random
+import time
+from deterministic_quicksort import quicksort
+from randomized_quicksort import randomized_quicksort
+
+def measure_time(quicksort_func, arr):
+    start_time = time.time()
+    quicksort_func(arr)
+    return time.time() - start_time
+
+# Test different input sizes and distributions
+def run_tests():
+    sizes = [1000, 5000, 10000, 50000]
+    for size in sizes:
+        arr_random = [random.randint(1, 10000) for _ in range(size)]
+        arr_sorted = sorted(arr_random)
+        arr_reverse_sorted = sorted(arr_random, reverse=True)
+
+        print(f"\nArray size: {size}")
+        
+        print(f"Deterministic Quicksort (Random): {measure_time(quicksort, arr_random)} seconds")
+        print(f"Deterministic Quicksort (Sorted): {measure_time(quicksort, arr_sorted)} seconds")
+        print(f"Deterministic Quicksort (Reverse-Sorted): {measure_time(quicksort, arr_reverse_sorted)} seconds")
+        
+        print(f"Randomized Quicksort (Random): {measure_time(randomized_quicksort, arr_random)} seconds")
+        print(f"Randomized Quicksort (Sorted): {measure_time(randomized_quicksort, arr_sorted)} seconds")
+        print(f"Randomized Quicksort (Reverse-Sorted): {measure_time(randomized_quicksort, arr_reverse_sorted)} seconds")
+
+if __name__ == "__main__":
+    run_tests()
